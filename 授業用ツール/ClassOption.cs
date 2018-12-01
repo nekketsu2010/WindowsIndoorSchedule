@@ -51,12 +51,20 @@ namespace 授業用ツール
             {
                 listView1.Items.Add(ShareData.timeTables[i].getName());
             }
-            for (int i = 0; i < listView1.Items.Count; i++)
+            if (schedule.getType() == 0)
             {
-                if (schedule.getTimeTable() == ShareData.timeTables[i].getName())
+                radioButton1.Checked = true;
+                for (int i = 0; i < listView1.Items.Count; i++)
                 {
-                    listView1.Items[i].Selected = true;
+                    if (schedule.getTimeTable() == ShareData.timeTables[i].getName())
+                    {
+                        listView1.Items[i].Selected = true;
+                    }
                 }
+            }
+            else
+            {
+                radioButton2.Checked = true;
             }
             dateTimePicker1.Value = schedule.getBeginTime();
             dateTimePicker2.Value = schedule.getEndTime();
@@ -125,6 +133,7 @@ namespace 授業用ツール
             {
                 //リストから情環とか選んだものからBeginTimeとEndTimeを取得する
                 Console.WriteLine("これが現実だ！" + listView1.SelectedItems[0].Text);
+                schedule.setType(0);
                 for (int i = 0; i < ShareData.timeTables.Count; i++)
                 {
                     Console.WriteLine(ShareData.timeTables[i].getName());
@@ -139,6 +148,7 @@ namespace 授業用ツール
             }
             else
             {
+                schedule.setType(1);
                 schedule.setBeginTime(dateTimePicker1.Value);
                 schedule.setEndTime(dateTimePicker2.Value);
             }
