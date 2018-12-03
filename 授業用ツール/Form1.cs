@@ -149,7 +149,7 @@ namespace 授業用ツール
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private async void timer1_Tick(object sender, EventArgs e)
         {
             //講義時間が近づいたら通知するシステム
             for (int i = 0; i < UserData.scheduleClasses.Count; i++)
@@ -205,7 +205,7 @@ namespace 授業用ツール
 
         //4.1秒ごとにWifi測る（現在位置部屋特定）
         //このタイマーは授業中のみ実施
-        private void timer2_Tick(object sender, EventArgs e)
+        private async void timer2_Tick(object sender, EventArgs e)
         {
             WifiInfo wifiInfo = new WifiInfo();
             foreach (BssNetworkPack network in NativeWifi.EnumerateBssNetworks())
