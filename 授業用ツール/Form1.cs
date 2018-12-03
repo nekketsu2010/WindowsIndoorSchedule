@@ -16,7 +16,7 @@ namespace 授業用ツール
 {
     public partial class Form1 : Form
     {
-        private string url = "http://5dd6953f.ngrok.io/sample-game-server/libsvm/predict";
+        private string url = "http://a0f90791.ngrok.io/sample-game-server/libsvm/predict";
         private string isRoom = ""; //現在いる部屋
         public Form1()
         {
@@ -183,6 +183,7 @@ namespace 授業用ツール
                 if (beginSecond > -10 && endSecond < 0 && day[(int)DateTime.Now.DayOfWeek])
                 {
                     timer1.Enabled = false;
+                    label3.Visible = true;
                     timer2.Enabled = true;
                 }
             }
@@ -253,7 +254,7 @@ namespace 授業用ツール
                     label3.Text = UserData.scheduleClasses[i].getName();
                     //部屋にいるか？
                     if (isRoom == UserData.scheduleClasses[i].getRoomName())
-                    {
+                    {                       
                         label4.Visible = true;
                         //講義資料自動オープンをするよ
                         for (int j = 0; j < UserData.scheduleClasses[i].size(); j++)
@@ -264,10 +265,16 @@ namespace 授業用ツール
                                 //"C:\test\1.txt"を関連付けられたアプリケーションで開く
                                 System.Diagnostics.Process p =
                                     System.Diagnostics.Process.Start(Environment.CurrentDirectory + "\\" + UserData.scheduleClasses[i].getName() + "\\" + document.getDocumentName());
-                                UserData.scheduleClasses[i].setIsClass(true);
+
+                                if (j == UserData.scheduleClasses[i].size() - 1)
+                                {
+                                    UserData.scheduleClasses[i].setIsClass(true);
+                                }
                                 //この辺に出席を送信する処理入れたい
 
+                                Console.WriteLine(document.getDocumentName() + " 開いた");
                             }
+                            await Task.Delay(1000);
                         }
                     }
                 }
@@ -276,6 +283,8 @@ namespace 授業用ツール
             if (num == 0)
             {
                 timer1.Enabled = true;
+                label3.Visible = false;
+                label4.Visible = false;
                 timer2.Enabled = false;
             }
 

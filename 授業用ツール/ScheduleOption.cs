@@ -28,6 +28,8 @@ namespace 授業用ツール
                 listView1.Items.Add(ShareData.timeTables[i].getName());
             }
 
+            dateTimePicker2.Value = DateTime.Parse("23:59");
+
         }
 
         private void button1_Click(object sender, EventArgs e)
