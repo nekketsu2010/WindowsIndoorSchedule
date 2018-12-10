@@ -16,19 +16,6 @@ namespace 授業用ツール
         {
             InitializeComponent();
 
-            //部屋を追加処理
-            for (int i = 0; i < ShareData.rooms.Count; i++)
-            {
-                listView2.Items.Add(ShareData.rooms[i].getRoomName());
-            }
-
-            //時間割を追加処理
-            for (int i = 0; i < ShareData.timeTables.Count; i++)
-            {
-                listView1.Items.Add(ShareData.timeTables[i].getName());
-            }
-
-            dateTimePicker2.Value = DateTime.Parse("23:59");
 
         }
 
@@ -50,27 +37,28 @@ namespace 授業用ツール
 
             //ScheduleClass作成
             ScheduleClass schedule = new ScheduleClass();
+            TimeClass time = new TimeClass();
             schedule.setName(textBox1.Text);
-            schedule.setRoomName(listView2.SelectedItems[0].Text);
+            time.setRoomName(listView2.SelectedItems[0].Text);
             int type = 0;
             if (!radioButton1.Checked)
             {
                 type = 1;
             }
-            schedule.setType(type);
+            time.setType(type);
 
             if(type==0)
             {
                 //リストから情環とか選んだものからBeginTimeとEndTimeを取得する
                 Console.WriteLine("これが現実だ！" + listView1.SelectedItems[0].Text);
-                schedule.setTimeTable(listView1.SelectedItems[0].Text);
+                time.setTimeTable(listView1.SelectedItems[0].Text);
                 for (int i = 0; i < ShareData.timeTables.Count; i++)
                 {
                     Console.WriteLine(ShareData.timeTables[i].getName());
                     if (listView1.SelectedItems[0].Text == ShareData.timeTables[i].getName())
                     {
-                        schedule.setBeginTime(ShareData.timeTables[i].getBeginTime());
-                        schedule.setEndTime(ShareData.timeTables[i].getEndTime());
+                        time.setBeginTime(ShareData.timeTables[i].getBeginTime());
+                        time.setEndTime(ShareData.timeTables[i].getEndTime());
                         break;
                     }
                 }
@@ -78,8 +66,8 @@ namespace 授業用ツール
             }
             else
             {
-                schedule.setBeginTime(dateTimePicker1.Value);
-                schedule.setEndTime(dateTimePicker2.Value);
+                time.setBeginTime(dateTimePicker1.Value);
+                time.setEndTime(dateTimePicker2.Value);
             }
 
             bool[] day = new bool[7];
@@ -90,8 +78,9 @@ namespace 授業用ツール
             day[4] = checkBox5.Checked;
             day[5] = checkBox6.Checked;
             day[6] = checkBox7.Checked;
-            schedule.setDay(day);
+            time.setDay(day);
 
+            schedule.addTime(time);
             UserData.scheduleClasses.Add(schedule);
 
             this.Close();

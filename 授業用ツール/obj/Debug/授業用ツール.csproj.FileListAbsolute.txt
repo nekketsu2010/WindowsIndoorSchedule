@@ -79,3 +79,7 @@ C:\Users\Owner\Desktop\Git\WindowsIndoorSchedule\授業用ツール\obj\Debug\�
 C:\Users\Owner\Desktop\Git\WindowsIndoorSchedule\授業用ツール\obj\Debug\授業用ツール.csproj.CopyComplete
 C:\Users\Owner\Desktop\Git\WindowsIndoorSchedule\授業用ツール\obj\Debug\授業用ツール.exe
 C:\Users\Owner\Desktop\Git\WindowsIndoorSchedule\授業用ツール\obj\Debug\授業用ツール.pdb
+C:\Users\ohyama2\Documents\SR\GitHub\授業用ツール\授業用ツール\obj\Debug\授業用ツール.Unipa.resources
+C:\Users\ohyama2\Documents\SR\GitHub\授業用ツール\授業用ツール\bin\Debug\Newtonsoft.Json.dll
+C:\Users\ohyama2\Documents\SR\GitHub\授業用ツール\授業用ツール\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\ohyama2\Documents\SR\GitHub\授業用ツール\授業用ツール\bin\Debug\Newtonsoft.Json.xml

@@ -9,21 +9,11 @@ namespace 授業用ツール
     class ScheduleClass
     {
         private string name; //スケジュールの名前(講義名、ゼミなど)
-        private string roomName; //教室名
-        private int type = 0; //0=講義、1=スケジュール（ゼミなど）
 
-        private bool[] day = new bool[7]; //日～土　何曜日に発動するのか
-
-        //type=0のとき使用
-        private string timeTable; //情環1時限　といった時間割の文字列
-
-        //type=1のとき使用
-        private DateTime beginTime = new DateTime(); //開始時間
-        private DateTime endTime = new DateTime(); //終了時間
+        private List<TimeClass> timeClasses = new List<TimeClass>(); //時間のリスト
 
         private List<DocumentClass> documents = new List<DocumentClass>(); //資料のリスト
 
-        private bool isClass = false;
 
         public ScheduleClass()
         {
@@ -39,58 +29,25 @@ namespace 授業用ツール
             return this.name;
         }
 
-        public void setRoomName(string roomName)
+        public void addTime(TimeClass timeClass)
         {
-            this.roomName = roomName;
+            timeClasses.Add(timeClass);
         }
-        public string getRoomName()
+        public void removeTime(int num)
         {
-            return roomName;
+            timeClasses.RemoveAt(num);
         }
-
-        public void setType(int type)
+        public TimeClass getTime(int num)
         {
-            this.type = type;
+            return timeClasses[num];
         }
-        public int getType()
+        public void renewTime(TimeClass timeClass, int num)
         {
-            return type;
+            timeClasses[num] = timeClass;
         }
-
-        public void setDay(bool[] day)
+        public int TimeSize()
         {
-            this.day = day;
-        }
-        public bool[] getDay()
-        {
-            return day;
-        }
-
-        public void setTimeTable(string timeTable)
-        {
-            this.timeTable = timeTable;
-        }
-        public string getTimeTable()
-        {
-            return timeTable;
-        }
-
-        public void setBeginTime(DateTime beginTime)
-        {
-            this.beginTime = beginTime;
-        }
-        public DateTime getBeginTime()
-        {
-            return beginTime;
-        }
-
-        public void setEndTime(DateTime endTime)
-        {
-            this.endTime = endTime;
-        }
-        public DateTime getEndTime()
-        {
-            return endTime;
+            return timeClasses.Count;
         }
 
         public void addDocument(DocumentClass document)
@@ -109,18 +66,9 @@ namespace 授業用ツール
         {
             documents[num] = document;
         }
-        public int size()
+        public int DocumentSize()
         {
             return documents.Count;
-        }
-
-        public void setIsClass(bool isClass)
-        {
-            this.isClass = isClass;
-        }
-        public bool getIsClass()
-        {
-            return isClass;
         }
     }
 }

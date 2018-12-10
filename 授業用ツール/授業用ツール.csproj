@@ -36,6 +36,9 @@
     <Reference Include="ManagedNativeWifi">
       <HintPath>..\..\..\..\Documents\SR\GetWifi_Windows\GetWifi_Windows\bin\Debug\ManagedNativeWifi.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -83,7 +86,20 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="ShareData.cs" />
+    <Compile Include="TimeClass.cs" />
+    <Compile Include="TimeOption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TimeOption.Designer.cs">
+      <DependentUpon>TimeOption.cs</DependentUpon>
+    </Compile>
     <Compile Include="TimeTable.cs" />
+    <Compile Include="Unipa.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Unipa.Designer.cs">
+      <DependentUpon>Unipa.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserData.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="WifiInfo.cs" />
@@ -109,6 +125,13 @@
     <EmbeddedResource Include="ScheduleOption.resx">
       <DependentUpon>ScheduleOption.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TimeOption.resx">
+      <DependentUpon>TimeOption.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unipa.resx">
+      <DependentUpon>Unipa.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
