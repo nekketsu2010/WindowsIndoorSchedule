@@ -63,6 +63,7 @@ namespace 授業用ツール
                     TimeTable timeTable = new TimeTable();
                     timeTable.setName(csv[0]);
                     timeTable.setTime(DateTime.Parse(csv[1]), DateTime.Parse(csv[2]));
+                    timeTable.setUnipaName(csv[3]);
                     ShareData.timeTables.Add(timeTable);
                     Console.WriteLine(csv[0]);
                 }

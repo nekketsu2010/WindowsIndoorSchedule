@@ -66,6 +66,7 @@ namespace 授業用ツール
             checkBox7.Checked = day[6];
         }
 
+        //決定ボタンを押したとき
         private void button1_Click(object sender, EventArgs e)
         {
             timeClass.setDay(new bool[] { checkBox1.Checked, checkBox2.Checked, checkBox3.Checked, checkBox4.Checked, checkBox5.Checked, checkBox6.Checked, checkBox7.Checked });

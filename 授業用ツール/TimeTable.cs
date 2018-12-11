@@ -9,6 +9,7 @@ namespace 授業用ツール
     class TimeTable
     {
         private string name;
+        private string unipaName;
         private DateTime beginTime = new DateTime();
         private DateTime endTime = new DateTime();
 
@@ -24,6 +25,15 @@ namespace 授業用ツール
         public string getName()
         {
             return name;
+        }
+
+        public void setUnipaName(string name)
+        {
+            this.unipaName = name;
+        }
+        public string getUnipaName()
+        {
+            return unipaName;
         }
 
         public void setTime(DateTime beginTime, DateTime endTime)

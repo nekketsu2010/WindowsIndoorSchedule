@@ -37,5 +37,16 @@ namespace 授業用ツール
                     ((int)(DayOfWeek.Saturday - day.DayOfWeek + wantDayOfWeek) % 7) + 1);
             }
         }
+
+        public static DateTime[] createCalendar(int beginHour, int beginMinute, int endHour, int endMinute)
+        {
+            DateTime beginCal = DateTime.Now;
+            DateTime endCal = DateTime.Now;
+            beginCal.set(DateTime.HOUR_OF_DAY, beginHour);
+            beginCal.set(DateTime.MINUTE, beginMinute);
+            endCal.set(DateTime.HOUR_OF_DAY, endHour);
+            endCal.set(DateTime.MINUTE, endMinute);
+            return new DateTime[] { beginCal, endCal };
+        }
     }
 }

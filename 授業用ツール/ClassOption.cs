@@ -22,55 +22,9 @@ namespace 授業用ツール
 
             schedule = UserData.scheduleClasses[ShareData.num];
             textBox1.Text = schedule.getName();
-            if (schedule.getType() != 0)
-            {
-                radioButton2.Checked = true;
-            }
-            bool[] day = schedule.getDay();
-            checkBox1.Checked = day[0];
-            checkBox2.Checked = day[1];
-            checkBox3.Checked = day[2];
-            checkBox4.Checked = day[3];
-            checkBox5.Checked = day[4];
-            checkBox6.Checked = day[5];
-            checkBox7.Checked = day[6];
-            for (int i = 0; i < ShareData.rooms.Count; i++)
-            {
-                listView2.Items.Add(ShareData.rooms[i].getRoomName());
-            }
-            Console.WriteLine(schedule.getRoomName());
-            for (int i = 0; i < listView2.Items.Count; i++)
-            {
-                Console.WriteLine(ShareData.rooms[i].getRoomName());
-                if (schedule.getRoomName() == ShareData.rooms[i].getRoomName())
-                {
-                    listView2.Items[i].Selected = true;
-                }
-            }
-            for (int i = 0; i < ShareData.timeTables.Count; i++)
-            {
-                listView1.Items.Add(ShareData.timeTables[i].getName());
-            }
-            if (schedule.getType() == 0)
-            {
-                radioButton1.Checked = true;
-                for (int i = 0; i < listView1.Items.Count; i++)
-                {
-                    if (schedule.getTimeTable() == ShareData.timeTables[i].getName())
-                    {
-                        listView1.Items[i].Selected = true;
-                    }
-                }
-            }
-            else
-            {
-                radioButton2.Checked = true;
-            }
-            dateTimePicker1.Value = schedule.getBeginTime();
-            dateTimePicker2.Value = schedule.getEndTime();
 
             //資料一覧の読み込み
-            for (int i = 0; i < UserData.scheduleClasses[ShareData.num].size(); i++)
+            for (int i = 0; i < UserData.scheduleClasses[ShareData.num].DocumentSize(); i++)
             {
                 checkedListBox1.Items.Add(schedule.getDocument(i).getDocumentName(),
                     schedule.getDocument(i).getOpen());
@@ -82,7 +36,7 @@ namespace 授業用ツール
         {
             checkedListBox1.Items.Clear();
             //資料一覧の読み込み
-            for (int i = 0; i < schedule.size(); i++)
+            for (int i = 0; i < schedule.DocumentSize(); i++)
             {
                 checkedListBox1.Items.Add(schedule.getDocument(i).getDocumentName(),
                     schedule.getDocument(i).getOpen());
@@ -112,49 +66,9 @@ namespace 授業用ツール
         private void button2_Click(object sender, EventArgs e)
         {
             schedule.setName(textBox1.Text);
-            schedule.setDay(new bool[] { checkBox1.Checked, checkBox2.Checked, checkBox3.Checked, checkBox4.Checked, checkBox5.Checked, checkBox6.Checked, checkBox7.Checked });
-            for (int i = 0; i < ShareData.rooms.Count; i++)
-            {
-                if (listView2.Items[i].Selected)
-                {
-                    schedule.setRoomName(listView2.Items[i].Text);
-                    break;
-                }
-            }
-            for (int i = 0; i < ShareData.timeTables.Count; i++)
-            {
-                if (listView1.Items[i].Selected)
-                {
-                    schedule.setTimeTable(listView1.Items[i].Text);
-                    break;
-                }
-            }
-            if (radioButton1.Checked)
-            {
-                //リストから情環とか選んだものからBeginTimeとEndTimeを取得する
-                Console.WriteLine("これが現実だ！" + listView1.SelectedItems[0].Text);
-                schedule.setType(0);
-                for (int i = 0; i < ShareData.timeTables.Count; i++)
-                {
-                    Console.WriteLine(ShareData.timeTables[i].getName());
-                    if (listView1.SelectedItems[0].Text == ShareData.timeTables[i].getName())
-                    {
-                        schedule.setBeginTime(ShareData.timeTables[i].getBeginTime());
-                        schedule.setEndTime(ShareData.timeTables[i].getEndTime());
-                        break;
-                    }
-                }
-
-            }
-            else
-            {
-                schedule.setType(1);
-                schedule.setBeginTime(dateTimePicker1.Value);
-                schedule.setEndTime(dateTimePicker2.Value);
-            }
 
             //資料状態の保存
-            for (int i = 0; i < schedule.size(); i++)
+            for (int i = 0; i < schedule.DocumentSize(); i++)
             {
                 schedule.getDocument(i).setOpen(checkedListBox1.GetItemChecked(i));
                 //ファイルをコピーする（ファイルが存在していない場合のみ）
@@ -168,6 +82,38 @@ namespace 授業用ツール
             UserData.scheduleClasses[ShareData.num] = schedule;
 
             this.Close();
+        }
+
+        //新規追加ボタンを押したとき
+        private void button4_Click(object sender, EventArgs e)
+        {
+            TimeOption timeOption = new TimeOption();
+            timeOption.FormClosed += new FormClosedEventHandler(SubFormClosed);
+            timeOption.Show();
+            this.Enabled = false;
+        }
+
+        private void SubFormClosed(object sender, EventArgs e)
+        {
+            checkedListBox2.Items.Clear();
+            //shedule更新
+            for (int i = 0; i < UserData.scheduleClasses[ShareData.num].TimeSize(); i++)
+            {
+                TimeClass time = UserData.scheduleClasses[ShareData.num].getTime(i);
+                string str = "";
+                for (int j = 0; j < ShareData.dayofWeek.Length; j++)
+                {
+                    if (time.getDay()[j])
+                    {
+                        str += ShareData.dayofWeek[j];
+                    }
+                }
+                str += " " + time.getRoomName() + " " + time.getBeginTime() + "～" + time.getEndTime();
+                checkedListBox2.Items.Add(str,
+                    schedule.getDocument(i).getOpen());
+            }
+
+            this.Enabled = true;
         }
     }
 }
