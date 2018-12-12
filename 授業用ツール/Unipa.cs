@@ -61,14 +61,19 @@ namespace 授業用ツール
                                 string Name = element["Name"];
 
                                 TimeClass timeClass = new TimeClass();
-                                timeClass.setType(0);
-
+                                TimeClass unipa = new TimeClass();
+                                timeClass.setType(1);
+                                //TimeTableの特定
                                 for (int i = 0; i < ShareData.timeTables.Count; i++)
                                 {
                                     TimeTable timeTable = ShareData.timeTables[i];
+                                    //もし"J1限"といった文字列が同じだったら
                                     if (TimeName == timeTable.getUnipaName())
                                     {
-                                       
+                                        unipa.setTimeTable(TimeName);
+                                        unipa.setBeginTime(timeTable.getBeginTime());
+                                        unipa.setEndTime(timeTable.getEndTime());
+                                        Console.WriteLine(TimeName + "を登録");
                                         break;
                                     }
                                 }
@@ -80,19 +85,16 @@ namespace 授業用ツール
                                     ScheduleClass schedule = new ScheduleClass();
 
                                     schedule.setName(Name);
-                                    //TimeTableの特定
-                                    for (int i = 0; i < ShareData.timeTables.Count; i++)
-                                    {
-                                        TimeTable timeTable = ShareData.timeTables[i];
-                                        //もし"J1限"といった文字列が同じだったら
-                                        if (TimeName == timeTable.getUnipaName())
-                                        {
-                                            timeClass.setTimeTable(TimeName);
-                                            timeClass.setBeginTime(timeTable.getBeginTime());
-                                            timeClass.setEndTime(timeTable.getEndTime());
-                                            break;
-                                        }
-                                    }
+                                    timeClass.setTimeTable(TimeName);
+                                    timeClass.setBeginTime(unipa.getBeginTime());
+                                    timeClass.setEndTime(unipa.getEndTime());
+                                    timeClass.setOneDay(true, num);
+                                    schedule.addTime(timeClass);
+                                    UserData.scheduleClasses.Add(schedule);
+                                    Console.WriteLine("はじめましての追加" + schedule.getName() + ShareData.dayofWeek[num]);
+                                    //新規フォルダ作成
+                                    System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + "\\" + schedule.getName());
+                                    continue;
                                 }
                                 //すでにスケジュールが入っている場合
                                 else
@@ -105,8 +107,43 @@ namespace 授業用ツール
                                             //開始時間と終了時間が同じなら曜日のみ追加
                                             for (int j = 0; j < schedule.TimeSize(); j++)
                                             {
-                                                if(schedule.getTime(j).getBeginTime().Hour == )
+                                                timeClass = schedule.getTime(j);
+                                                //時限が同じだったら"J1限"といった文字列が同じだったらということ
+                                                if (timeClass.getTimeTable() == TimeName)
+                                                {
+                                                    //曜日の登録
+                                                    timeClass.setOneDay(true, num);
+                                                    UserData.scheduleClasses[i].renewTime(timeClass, j);
+                                                    Console.WriteLine("おきかえました" + UserData.scheduleClasses[i].getName() + ShareData.dayofWeek[num]);
+                                                    break;
+                                                }
+                                                else if (j == schedule.TimeSize() - 1)
+                                                {
+                                                    TimeClass newTime = new TimeClass();
+                                                    newTime.setTimeTable(TimeName);
+                                                    newTime.setOneDay(true, num);
+                                                    newTime.setBeginTime(unipa.getBeginTime());
+                                                    newTime.setEndTime(unipa.getEndTime());
+                                                    UserData.scheduleClasses[i].addTime(newTime);
+                                                    Console.WriteLine(schedule.getName() + "のタイムを追加");
+                                                }
                                             }
+                                            break;
+                                        }
+                                        //その授業のスケジュールが追加されていない場合
+                                        else if (i == UserData.scheduleClasses.Count - 1)
+                                        {
+                                            Console.WriteLine("スケジュールの新規追加");
+                                            ScheduleClass newSchedule = new ScheduleClass();
+                                            TimeClass newTime = new TimeClass();
+                                            newSchedule.setName(Name);
+                                            newTime.setOneDay(true, num);
+                                            newTime.setTimeTable(TimeName);
+                                            newTime.setBeginTime(unipa.getBeginTime());
+                                            newTime.setEndTime(unipa.getEndTime());
+                                            newSchedule.addTime(newTime);
+                                            UserData.scheduleClasses.Add(newSchedule);
+                                            System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + "\\" + newSchedule.getName());
                                         }
                                     }
                                 }                         
@@ -114,10 +151,19 @@ namespace 授業用ツール
                         }
                         num++;
                     }
+                    //最後にできたという表示をしてウィンドウを閉じる
+                    DialogResult message = MessageBox.Show("UNIPAから時間割を追加しました！",
+                                            "正常終了",
+                                            MessageBoxButtons.OK,
+                                            MessageBoxIcon.Information);
+                    if (message == DialogResult.Yes)
+                    {
+                        this.Close();                       
+                    }
                 }
                 stm.Close();
             }
-            rsp.Close();
+            rsp.Close();           
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

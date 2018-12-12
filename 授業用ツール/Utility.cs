@@ -42,10 +42,8 @@ namespace 授業用ツール
         {
             DateTime beginCal = DateTime.Now;
             DateTime endCal = DateTime.Now;
-            beginCal.set(DateTime.HOUR_OF_DAY, beginHour);
-            beginCal.set(DateTime.MINUTE, beginMinute);
-            endCal.set(DateTime.HOUR_OF_DAY, endHour);
-            endCal.set(DateTime.MINUTE, endMinute);
+            beginCal = DateTime.Parse(beginHour + ":" + beginMinute);
+            endCal = DateTime.Parse(endHour + ":" + endMinute);
             return new DateTime[] { beginCal, endCal };
         }
     }

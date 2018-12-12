@@ -15,5 +15,6 @@ namespace 授業用ツール
         public static string[] dayofWeek = new string[] { "日", "月", "火", "水", "木", "金", "土" };
 
         public static int num = 0; //ほかフォームに配列のアドレスを送る
+        public static int timeNum = -1; //ほかフォームにtimeClassの配列のアドレスを送る
     }
 }

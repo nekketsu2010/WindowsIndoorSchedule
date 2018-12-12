@@ -10,7 +10,7 @@ namespace 授業用ツール
     {
         private string roomName; //情報通信サービス研究室　などが入る
 
-        private int type = 0; //0:講義　1:スケジュール（ゼミなど）
+        private int type = 1; //0:講義　1:スケジュール（ゼミなど）
         private bool isOnce = false; //１回のみかどうか
 
         //isOnceがFalseのとき使う

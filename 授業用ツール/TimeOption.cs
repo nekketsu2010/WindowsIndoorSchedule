@@ -13,11 +13,23 @@ namespace 授業用ツール
     public partial class TimeOption : Form
     {
         private TimeClass timeClass = new TimeClass();
-        private int num = -1;
 
         public TimeOption()
         {
             InitializeComponent();
+
+            //ShareData.TimeNumを見て、-1かそうでないかを判断
+            if (ShareData.timeNum != -1)
+            {
+                timeClass = UserData.scheduleClasses[ShareData.num].getTime(ShareData.timeNum);
+                dateTimePicker1.Value = timeClass.getBeginTime();
+                dateTimePicker2.Value = timeClass.getEndTime();
+            }
+            else
+            {
+                dateTimePicker2.Value = DateTime.Parse("23:59");
+            }
+
 
             //部屋を追加処理
             for (int i = 0; i < ShareData.rooms.Count; i++)
@@ -53,8 +65,7 @@ namespace 授業用ツール
             {
                 radioButton2.Checked = true;
             }
-            dateTimePicker1.Value = timeClass.getBeginTime();
-            dateTimePicker2.Value = timeClass.getEndTime();
+
 
             bool[] day = timeClass.getDay();
             checkBox1.Checked = day[0];
@@ -109,6 +120,18 @@ namespace 授業用ツール
                 timeClass.setBeginTime(dateTimePicker1.Value);
                 timeClass.setEndTime(dateTimePicker2.Value);
             }
+
+            if (ShareData.timeNum != -1)
+            {
+                //時間を上書き
+                UserData.scheduleClasses[ShareData.num].renewTime(timeClass, ShareData.timeNum);
+            }
+            else
+            {
+                //時間を追加
+                UserData.scheduleClasses[ShareData.num].addTime(timeClass);
+            }
+            this.Close();
         }
     }
 }

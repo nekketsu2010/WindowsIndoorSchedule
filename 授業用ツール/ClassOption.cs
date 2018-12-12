@@ -24,10 +24,26 @@ namespace 授業用ツール
             textBox1.Text = schedule.getName();
 
             //資料一覧の読み込み
-            for (int i = 0; i < UserData.scheduleClasses[ShareData.num].DocumentSize(); i++)
+            for (int i = 0; i < schedule.DocumentSize(); i++)
             {
                 checkedListBox1.Items.Add(schedule.getDocument(i).getDocumentName(),
                     schedule.getDocument(i).getOpen());
+            }
+
+            //時間一覧の読み込み
+            for (int i = 0; i < schedule.TimeSize(); i++)
+            {
+                TimeClass time = schedule.getTime(i);
+                string text = "";
+                for (int j = 0; j < ShareData.dayofWeek.Length; j++)
+                {
+                    if (time.getDay()[j])
+                    {
+                        text += ShareData.dayofWeek[j];
+                    }
+                }
+                text += " " + time.getBeginTime().ToShortTimeString() + "～" + time.getEndTime().ToShortTimeString() + " " + time.getRoomName();
+                checkedListBox2.Items.Add(text);               
             }
 
         }
@@ -86,7 +102,7 @@ namespace 授業用ツール
 
         //新規追加ボタンを押したとき
         private void button4_Click(object sender, EventArgs e)
-        {
+        {           
             TimeOption timeOption = new TimeOption();
             timeOption.FormClosed += new FormClosedEventHandler(SubFormClosed);
             timeOption.Show();
@@ -96,24 +112,38 @@ namespace 授業用ツール
         private void SubFormClosed(object sender, EventArgs e)
         {
             checkedListBox2.Items.Clear();
-            //shedule更新
-            for (int i = 0; i < UserData.scheduleClasses[ShareData.num].TimeSize(); i++)
+            //時間一覧の読み込み
+            for (int i = 0; i < schedule.TimeSize(); i++)
             {
-                TimeClass time = UserData.scheduleClasses[ShareData.num].getTime(i);
-                string str = "";
+                TimeClass time = schedule.getTime(i);
+                string text = "";
                 for (int j = 0; j < ShareData.dayofWeek.Length; j++)
                 {
                     if (time.getDay()[j])
                     {
-                        str += ShareData.dayofWeek[j];
+                        text += ShareData.dayofWeek[j];
                     }
                 }
-                str += " " + time.getRoomName() + " " + time.getBeginTime() + "～" + time.getEndTime();
-                checkedListBox2.Items.Add(str,
-                    schedule.getDocument(i).getOpen());
+                text += " " + time.getBeginTime().ToShortTimeString() + "～" + time.getEndTime().ToShortTimeString() + " " + time.getRoomName();
+                checkedListBox2.Items.Add(text);
             }
 
             this.Enabled = true;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //インデックスを保存して編集画面へ
+            ShareData.timeNum = checkedListBox2.SelectedIndex;
+            TimeOption timeOption = new TimeOption();
+            timeOption.FormClosed += new FormClosedEventHandler(SubFormClosed);
+            timeOption.Show();
+            this.Enabled = false;
+        }
+
+        private void checkedListBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            button5.Enabled = checkedListBox2.SelectedItems.Count == 1;
         }
     }
 }

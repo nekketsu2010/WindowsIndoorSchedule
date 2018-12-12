@@ -16,7 +16,7 @@ namespace 授業用ツール
 {
     public partial class Form1 : Form
     {
-        private string url = "http://a0f90791.ngrok.io/sample-game-server/libsvm/predict";
+        private string url = "http://d0259c06.ngrok.io/sample-game-server/libsvm/predict";
         private string isRoom = ""; //現在いる部屋
         public Form1()
         {
@@ -34,7 +34,7 @@ namespace 授業用ツール
                 {
                     string[] csv = line.Split(',');     
                     ShareData.bssids.Add(csv[1]);
-                    Console.WriteLine(csv[1]);
+                    //Console.WriteLine(csv[1]);
                 }
             }
 
@@ -49,7 +49,7 @@ namespace 授業用ツール
                     room.setNum(csv[0]);
                     room.setRoomName(csv[1]);
                     ShareData.rooms.Add(room);
-                    Console.WriteLine(csv[1]);
+                    //Console.WriteLine(csv[1]);
                 }
             }
 
@@ -65,7 +65,7 @@ namespace 授業用ツール
                     timeTable.setTime(DateTime.Parse(csv[1]), DateTime.Parse(csv[2]));
                     timeTable.setUnipaName(csv[3]);
                     ShareData.timeTables.Add(timeTable);
-                    Console.WriteLine(csv[0]);
+                    //Console.WriteLine(csv[0]);
                 }
             }
 
@@ -104,10 +104,6 @@ namespace 授業用ツール
 
         private void 講義登録ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ScheduleOption scheduleOption = new ScheduleOption();
-            scheduleOption.FormClosed += new FormClosedEventHandler(SubFormClosed);
-            scheduleOption.Show();
-            this.Enabled = false;
         }
 
         private void 通知設定ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -155,37 +151,43 @@ namespace 授業用ツール
             //講義時間が近づいたら通知するシステム
             for (int i = 0; i < UserData.scheduleClasses.Count; i++)
             {
-                DateTime beginTime = UserData.scheduleClasses[i].getBeginTime();
-                DateTime endTime = UserData.scheduleClasses[i].getEndTime();
-                TimeSpan beginSpan = beginTime.TimeOfDay;
-                TimeSpan endSpan = endTime.TimeOfDay;
-                TimeSpan fromSpan = DateTime.Now.TimeOfDay - beginSpan;
-                TimeSpan toSpan = DateTime.Now.TimeOfDay - endSpan;
-                double beginSecond = fromSpan.TotalSeconds;
-                double endSecond = toSpan.TotalSeconds;
-                bool[] day = UserData.scheduleClasses[i].getDay();
-                Console.WriteLine((DateTime.Now.TimeOfDay - beginSpan).TotalSeconds + "秒前");
-                //10分前になったら　もちろん曜日も考慮
-                if (beginSecond > -600 && beginSecond < -599 && day[(int)DateTime.Now.DayOfWeek])
+                ScheduleClass schedule = UserData.scheduleClasses[i];
+                for (int j = 0; j < schedule.TimeSize(); j++)
                 {
-                    notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-                    notifyIcon1.BalloonTipTitle = "まもなく「" + UserData.scheduleClasses[i].getName() + "」";
-                    notifyIcon1.BalloonTipText = UserData.scheduleClasses[i].getRoomName() + "\n" + UserData.scheduleClasses[i].getBeginTime().ToShortTimeString() + "～";
-                    notifyIcon1.ShowBalloonTip(5000);
-                }
+                    TimeClass time = schedule.getTime(j);
+                    DateTime beginTime = time.getBeginTime();
+                    DateTime endTime = time.getEndTime();
+                    TimeSpan beginSpan = beginTime.TimeOfDay;
+                    TimeSpan endSpan = endTime.TimeOfDay;
+                    TimeSpan fromSpan = DateTime.Now.TimeOfDay - beginSpan;
+                    TimeSpan toSpan = DateTime.Now.TimeOfDay - endSpan;
+                    double beginSecond = fromSpan.TotalSeconds;
+                    double endSecond = toSpan.TotalSeconds;
+                    bool[] day = time.getDay();
+                    //Console.WriteLine((DateTime.Now.TimeOfDay - beginSpan).TotalSeconds + "秒前");
+                    //10分前になったら　もちろん曜日も考慮
+                    if (beginSecond > -600 && beginSecond < -599 && day[(int)DateTime.Now.DayOfWeek])
+                    {
+                        notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                        notifyIcon1.BalloonTipTitle = "まもなく「" + schedule.getName() + "」";
+                        notifyIcon1.BalloonTipText = time.getRoomName() + "\n" + time.getBeginTime().ToShortTimeString() + "～";
+                        notifyIcon1.ShowBalloonTip(5000);
+                    }
 
-                //授業前後は出席していないことにする（実施されていないので当然である）
-                if (beginSecond < -10 && endSecond > 0)
-                {
-                    UserData.scheduleClasses[i].setIsClass(false);
-                }
+                    //授業前後は出席していないことにする（実施されていないので当然である）
+                    if (beginSecond < -10 && endSecond > 0)
+                    {
+                        time.setClass(false);
+                        UserData.scheduleClasses[i].renewTime(time, j);
+                    }
 
-                //スケジュール実行中の時間帯はこのタイマーを切る
-                if (beginSecond > -10 && endSecond < 0 && day[(int)DateTime.Now.DayOfWeek])
-                {
-                    timer1.Enabled = false;
-                    label3.Visible = true;
-                    timer2.Enabled = true;
+                    //スケジュール実行中の時間帯はこのタイマーを切る
+                    if (beginSecond > -10 && endSecond < 0 && day[(int)DateTime.Now.DayOfWeek])
+                    {
+                        timer1.Enabled = false;
+                        label3.Visible = true;
+                        timer2.Enabled = true;
+                    }
                 }
             }
         }
@@ -237,47 +239,54 @@ namespace 授業用ツール
             int num = 0;
             for (int i = 0; i < UserData.scheduleClasses.Count; i++)
             {
-                DateTime beginTime = UserData.scheduleClasses[i].getBeginTime();
-                DateTime endTime = UserData.scheduleClasses[i].getEndTime();
-                TimeSpan beginSpan = beginTime.TimeOfDay;
-                TimeSpan endSpan = endTime.TimeOfDay;
-                TimeSpan fromSpan = DateTime.Now.TimeOfDay - beginSpan;
-                TimeSpan toSpan = DateTime.Now.TimeOfDay - endSpan;
-                double beginSecond = fromSpan.TotalSeconds;
-                double endSecond = toSpan.TotalSeconds;
-                bool[] day = UserData.scheduleClasses[i].getDay();
-                //実行中である
-                if (beginSecond > 0 && endSecond < 0 && day[(int)DateTime.Now.DayOfWeek])
+                ScheduleClass schedule = UserData.scheduleClasses[i];
+                for (int j = 0; j < schedule.TimeSize(); j++)
                 {
-                    num++;
+                    TimeClass time = schedule.getTime(j);
+                    DateTime beginTime = time.getBeginTime();
+                    DateTime endTime = time.getEndTime();
+                    TimeSpan beginSpan = beginTime.TimeOfDay;
+                    TimeSpan endSpan = endTime.TimeOfDay;
+                    TimeSpan fromSpan = DateTime.Now.TimeOfDay - beginSpan;
+                    TimeSpan toSpan = DateTime.Now.TimeOfDay - endSpan;
+                    double beginSecond = fromSpan.TotalSeconds;
+                    double endSecond = toSpan.TotalSeconds;
+                    bool[] day = time.getDay();
+                    //実行中である
+                    if (beginSecond > 0 && endSecond < 0 && day[(int)DateTime.Now.DayOfWeek])
+                    {
+                        num++;
 
-                    label1.Text = "現在";
-                    label3.Text = UserData.scheduleClasses[i].getName();
-                    //部屋にいるか？
-                    if (isRoom == UserData.scheduleClasses[i].getRoomName())
-                    {                       
-                        label4.Visible = true;
-                        //講義資料自動オープンをするよ
-                        for (int j = 0; j < UserData.scheduleClasses[i].size(); j++)
+                        label1.Text = "現在";
+                        label3.Text = UserData.scheduleClasses[i].getName();
+                        //部屋にいるか？
+                        if (isRoom == time.getRoomName())
                         {
-                            DocumentClass document = UserData.scheduleClasses[i].getDocument(j);
-                            if (document.getOpen() && !UserData.scheduleClasses[i].getIsClass())
+                            label4.Visible = true;
+                            //講義資料自動オープンをするよ
+                            for (int k = 0; k < UserData.scheduleClasses[i].DocumentSize(); k++)
                             {
-                                //"C:\test\1.txt"を関連付けられたアプリケーションで開く
-                                System.Diagnostics.Process p =
-                                    System.Diagnostics.Process.Start(Environment.CurrentDirectory + "\\" + UserData.scheduleClasses[i].getName() + "\\" + document.getDocumentName());
-
-                                if (j == UserData.scheduleClasses[i].size() - 1)
+                                DocumentClass document = UserData.scheduleClasses[i].getDocument(k);
+                                if (document.getOpen() && !time.getClass())
                                 {
-                                    UserData.scheduleClasses[i].setIsClass(true);
-                                }
-                                //この辺に出席を送信する処理入れたい
+                                    //"C:\test\1.txt"を関連付けられたアプリケーションで開く
+                                    System.Diagnostics.Process p =
+                                        System.Diagnostics.Process.Start(Environment.CurrentDirectory + "\\" + UserData.scheduleClasses[i].getName() + "\\" + document.getDocumentName());
 
-                                Console.WriteLine(document.getDocumentName() + " 開いた");
+                                    if (k == UserData.scheduleClasses[i].DocumentSize() - 1)
+                                    {
+                                        time.setClass(true);
+                                        UserData.scheduleClasses[i].renewTime(time, j);
+                                    }
+                                    //この辺に出席を送信する処理入れたい
+
+                                    Console.WriteLine(document.getDocumentName() + " 開いた");
+                                }
+                                await Task.Delay(1000);
                             }
-                            await Task.Delay(1000);
                         }
                     }
+
                 }
             }
             //実行中のものがないときタイマー２を切ってタイマー１をオンにする
@@ -301,6 +310,23 @@ namespace 授業用ツール
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void 手動登録ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScheduleOption scheduleOption = new ScheduleOption();
+            scheduleOption.FormClosed += new FormClosedEventHandler(SubFormClosed);
+            scheduleOption.Show();
+            this.Enabled = false;
+        }
+
+        private void uNIPAからToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Unipa unipa = new Unipa();
+            unipa.FormClosed += new FormClosedEventHandler(SubFormClosed);
+            unipa.Show();
+            this.Enabled = false;
 
         }
     }

@@ -16,7 +16,7 @@ namespace 授業用ツール
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Unipa());
+            Application.Run(new Form1());
         }
     }
 }
