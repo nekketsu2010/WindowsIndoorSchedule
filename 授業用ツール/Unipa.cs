@@ -15,7 +15,7 @@ namespace 授業用ツール
 {
     public partial class Unipa : Form
     {
-        private string url = "http://d0259c06.ngrok.io/sample-game-server/unipa_load?";
+        private string url = "http://7560d8bd.ngrok.io/sample-game-server/unipa_load?";
         private bool idFilled = false;
         private bool passFilled = false;
 

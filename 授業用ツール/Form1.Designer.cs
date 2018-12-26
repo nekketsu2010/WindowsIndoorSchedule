@@ -37,6 +37,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.講義オプションToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.講義登録ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uNIPAからToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.手動登録ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.通知設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -44,8 +46,7 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.uNIPAからToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.手動登録ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.スタートアップ登録ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,7 +97,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.講義オプションToolStripMenuItem,
             this.講義登録ToolStripMenuItem,
-            this.通知設定ToolStripMenuItem});
+            this.通知設定ToolStripMenuItem,
+            this.スタートアップ登録ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(484, 24);
@@ -118,6 +120,20 @@
             this.講義登録ToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
             this.講義登録ToolStripMenuItem.Text = "スケジュール登録";
             this.講義登録ToolStripMenuItem.Click += new System.EventHandler(this.講義登録ToolStripMenuItem_Click);
+            // 
+            // uNIPAからToolStripMenuItem
+            // 
+            this.uNIPAからToolStripMenuItem.Name = "uNIPAからToolStripMenuItem";
+            this.uNIPAからToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.uNIPAからToolStripMenuItem.Text = "UNIPAから";
+            this.uNIPAからToolStripMenuItem.Click += new System.EventHandler(this.uNIPAからToolStripMenuItem_Click);
+            // 
+            // 手動登録ToolStripMenuItem
+            // 
+            this.手動登録ToolStripMenuItem.Name = "手動登録ToolStripMenuItem";
+            this.手動登録ToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.手動登録ToolStripMenuItem.Text = "手動登録";
+            this.手動登録ToolStripMenuItem.Click += new System.EventHandler(this.手動登録ToolStripMenuItem_Click);
             // 
             // 通知設定ToolStripMenuItem
             // 
@@ -178,19 +194,12 @@
             this.label4.Text = "出席が確認されています";
             this.label4.Visible = false;
             // 
-            // uNIPAからToolStripMenuItem
+            // スタートアップ登録ToolStripMenuItem
             // 
-            this.uNIPAからToolStripMenuItem.Name = "uNIPAからToolStripMenuItem";
-            this.uNIPAからToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.uNIPAからToolStripMenuItem.Text = "UNIPAから";
-            this.uNIPAからToolStripMenuItem.Click += new System.EventHandler(this.uNIPAからToolStripMenuItem_Click);
-            // 
-            // 手動登録ToolStripMenuItem
-            // 
-            this.手動登録ToolStripMenuItem.Name = "手動登録ToolStripMenuItem";
-            this.手動登録ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.手動登録ToolStripMenuItem.Text = "手動登録";
-            this.手動登録ToolStripMenuItem.Click += new System.EventHandler(this.手動登録ToolStripMenuItem_Click);
+            this.スタートアップ登録ToolStripMenuItem.Name = "スタートアップ登録ToolStripMenuItem";
+            this.スタートアップ登録ToolStripMenuItem.Size = new System.Drawing.Size(103, 20);
+            this.スタートアップ登録ToolStripMenuItem.Text = "スタートアップ登録";
+            this.スタートアップ登録ToolStripMenuItem.Click += new System.EventHandler(this.スタートアップ登録ToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -237,6 +246,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ToolStripMenuItem uNIPAからToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 手動登録ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem スタートアップ登録ToolStripMenuItem;
     }
 }
 

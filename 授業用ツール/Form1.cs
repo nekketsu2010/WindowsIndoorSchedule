@@ -16,7 +16,7 @@ namespace 授業用ツール
 {
     public partial class Form1 : Form
     {
-        private string url = "http://d0259c06.ngrok.io/sample-game-server/libsvm/predict";
+        private string url = "http://7560d8bd.ngrok.io/sample-game-server/libsvm/predict";
         private string isRoom = ""; //現在いる部屋
         public Form1()
         {
@@ -328,6 +328,16 @@ namespace 授業用ツール
             unipa.Show();
             this.Enabled = false;
 
+        }
+
+        private void スタートアップ登録ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists("C:\\Users\\" + Environment.UserName + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\授業用ツール.lnk"))
+            {
+                //ショートカットをスタートアップフォルダにコピーする
+                System.IO.File.Copy(Environment.CurrentDirectory + "\\授業用ツール.lnk",
+                    "C:\\Users\\" + Environment.UserName + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\授業用ツール.lnk", false);
+            }        
         }
     }
 }
